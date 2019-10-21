@@ -19,7 +19,7 @@
 <meta property="og:description" content="前言前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。  搭建Hexo环境1.npm直接安装hexo1npm instal">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://dwchy.github.io/images/og_image.png">
-<meta property="og:updated_time" content="2019-10-21T16:47:36.236Z">
+<meta property="og:updated_time" content="2019-10-21T16:49:26.374Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="建站的一些思路和Hexo的部分简单指令">
 <meta name="twitter:description" content="前言前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。  搭建Hexo环境1.npm直接安装hexo1npm instal">
@@ -163,11 +163,11 @@
             <p><img src="https://s2.ax1x.com/2019/10/22/K1jVJK.png" alt="Hexo主页"></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。</p>
 <hr>
-<h2 id="搭建Hexo环境"><a href="#搭建Hexo环境" class="headerlink" title="搭建Hexo环境"></a><strong>搭建Hexo环境</strong></h2><h1 id="1-npm直接安装hexo"><a href="#1-npm直接安装hexo" class="headerlink" title="1.npm直接安装hexo"></a>1.npm直接安装hexo</h1><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+<h2 id="搭建Hexo环境"><a href="#搭建Hexo环境" class="headerlink" title="搭建Hexo环境"></a><strong>搭建Hexo环境</strong></h2><h3 id="1-npm直接安装hexo"><a href="#1-npm直接安装hexo" class="headerlink" title="1.npm直接安装hexo"></a>1.npm直接安装hexo</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
 
-<h1 id="2-初始化Hexo"><a href="#2-初始化Hexo" class="headerlink" title="2.初始化Hexo"></a>2.初始化Hexo</h1><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init bolg</span><br></pre></td></tr></table></figure>
+<h3 id="2-初始化Hexo"><a href="#2-初始化Hexo" class="headerlink" title="2.初始化Hexo"></a>2.初始化Hexo</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init bolg</span><br></pre></td></tr></table></figure>
 
-<h1 id="3-GitHub创建仓库并绑定SSH"><a href="#3-GitHub创建仓库并绑定SSH" class="headerlink" title="3.GitHub创建仓库并绑定SSH"></a>3.GitHub创建仓库并绑定SSH</h1><p>创建仓库略过。<br>本地绑定github：</p>
+<h3 id="3-GitHub创建仓库并绑定SSH"><a href="#3-GitHub创建仓库并绑定SSH" class="headerlink" title="3.GitHub创建仓库并绑定SSH"></a>3.GitHub创建仓库并绑定SSH</h3><p>创建仓库略过。<br>本地绑定github：</p>
 <figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="hljs-string">"yourname"</span></span><br><span class="line">git config --global user.email <span class="hljs-string">"youremail"</span></span><br></pre></td></tr></table></figure>
 
 <p>创建ssh密匙</p>
@@ -177,7 +177,7 @@
 <figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">cd</span> .ssh</span><br></pre></td></tr></table></figure>
 
 <p>复制<code>id_rsa.pub</code>，进入github的Setting中，在SSH keys选项内，点击<code>New SSH key</code>，粘贴。</p>
-<h1 id="4-部署hexo至github"><a href="#4-部署hexo至github" class="headerlink" title="4.部署hexo至github"></a>4.部署hexo至github</h1><p>打开站点主目录下的<code>_config.yml</code>，找到deploy项，修改为：</p>
+<h3 id="4-部署hexo至github"><a href="#4-部署hexo至github" class="headerlink" title="4.部署hexo至github"></a>4.部署hexo至github</h3><p>打开站点主目录下的<code>_config.yml</code>，找到deploy项，修改为：</p>
 <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/YourgithubName/YourgithubName.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
 
 <p>然后使用npm安装deploy-git:</p>

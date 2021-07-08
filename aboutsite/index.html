@@ -1,43 +1,748 @@
-const { Component } = require('inferno');
-const classname = require('hexo-component-inferno/lib/util/classname');
-const Head = require('./common/head');
-const Navbar = require('./common/navbar');
-const Widgets = require('./common/widgets');
-const Footer = require('./common/footer');
-const Scripts = require('./common/scripts');
-const Search = require('./common/search');
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8" />
 
-module.exports = class extends Component {
-    render() {
-        const { site, config, page, helper, body } = this.props;
+<meta name="generator" content="Hexo 3.9.0" />
 
-        const language = page.lang || page.language || config.language;
-        const columnCount = Widgets.getColumnCount(config.widgets);
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
-        return <html lang={language ? language.substr(0, 2) : ''}>
-            <Head site={site} config={config} helper={helper} page={page} />
-            <body class={`is-${columnCount}-column`}>
-                <Navbar config={config} helper={helper} page={page} />
-                <section class="section">
-                    <div class="container">
-                        <div class="columns">
-                            <div class={classname({
-                                column: true,
-                                'order-2': true,
-                                'column-main': true,
-                                'is-12': columnCount === 1,
-                                'is-8-tablet is-8-desktop is-8-widescreen': columnCount === 2,
-                                'is-8-tablet is-8-desktop is-6-widescreen': columnCount === 3
-                            })} dangerouslySetInnerHTML={{ __html: body }}></div>
-                            <Widgets site={site} config={config} helper={helper} page={page} position={'left'} />
-                            <Widgets site={site} config={config} helper={helper} page={page} position={'right'} />
-                        </div>
-                    </div>
-                </section>
-                <Footer config={config} helper={helper} />
-                <Scripts site={site} config={config} helper={helper} page={page} />
-                <Search config={config} helper={helper} />
-            </body>
-        </html>;
+<title>建站的一些思路和Hexo的部分简单指令 - My World</title>
+
+
+    <meta name="description" content="前言前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。">
+<meta name="keywords" content="Hexo,Blog,网站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="建站的一些思路和Hexo的部分简单指令">
+<meta property="og:url" content="http://dwchy.github.io/aboutsite/index.html">
+<meta property="og:site_name" content="My World">
+<meta property="og:description" content="前言前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://dwchy.github.io/images/og_image.png">
+<meta property="og:updated_time" content="2021-07-08T02:57:45.334Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="建站的一些思路和Hexo的部分简单指令">
+<meta name="twitter:description" content="前言前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。">
+<meta name="twitter:image" content="http://dwchy.github.io/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="https://s2.ax1x.com/2019/10/14/uzSPVU.png">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+<style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+
+    
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+    
+    
+    
+    
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="https://s2.ax1x.com/2019/10/14/uzS9bT.png" alt="建站的一些思路和Hexo的部分简单指令" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">主页</a>
+                
+                <a class="navbar-item"
+                href="/archives">归档</a>
+                
+                <a class="navbar-item"
+                href="/categories">分类</a>
+                
+                <a class="navbar-item"
+                href="/tags">标签</a>
+                
+                <a class="navbar-item"
+                href="/about">关于</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    <a class="navbar-item" target="_blank" title="My GitHub" href="https://github.com/DwChy">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+<div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-07-19T08:53:03.226Z">2019-07-19</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/前端/">前端</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    11 分钟 读完 (大约 1615 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                建站的一些思路和Hexo的部分简单指令
+            
+        </h1>
+        <div class="content">
+            <p><img src="https://s2.ax1x.com/2019/10/22/K1jVJK.png" alt="Hexo主页"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>前端时间想对自己学到的东西和一些脑洞进行记录，便想起了几年前搭好就放着吃灰的bolg。无奈之前是在虚拟机上搭建的hexo环境，换电脑后没有刻意保存，自然也找不回来了。于是我尝试在Mac上重新用Hexo进行搭建。不得不说，几年前的记忆都已经模糊了，碰过的一些坑又再次踩了上去。所以在此把Hexo建站的大概流程记录一下，以备后用。</p>
+<a id="more"></a>
+<hr>
+<h2 id="搭建Hexo环境"><a href="#搭建Hexo环境" class="headerlink" title="搭建Hexo环境"></a><strong>搭建Hexo环境</strong></h2><h3 id="1-npm直接安装hexo"><a href="#1-npm直接安装hexo" class="headerlink" title="1.npm直接安装hexo"></a>1.npm直接安装hexo</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-初始化Hexo"><a href="#2-初始化Hexo" class="headerlink" title="2.初始化Hexo"></a>2.初始化Hexo</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init bolg</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-GitHub创建仓库并绑定SSH"><a href="#3-GitHub创建仓库并绑定SSH" class="headerlink" title="3.GitHub创建仓库并绑定SSH"></a>3.GitHub创建仓库并绑定SSH</h3><p>创建仓库略过。<br>本地绑定github：</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="hljs-string">"yourname"</span></span><br><span class="line">git config --global user.email <span class="hljs-string">"youremail"</span></span><br></pre></td></tr></table></figure>
+
+<p>创建ssh密匙</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="hljs-string">"youremail"</span></span><br></pre></td></tr></table></figure>
+
+<p>然后进入生成的文件夹</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">cd</span> .ssh</span><br></pre></td></tr></table></figure>
+
+<p>复制<code>id_rsa.pub</code>，进入github的Setting中，在SSH keys选项内，点击<code>New SSH key</code>，粘贴。</p>
+<h3 id="4-部署hexo至github"><a href="#4-部署hexo至github" class="headerlink" title="4.部署hexo至github"></a>4.部署hexo至github</h3><p>打开站点主目录下的<code>_config.yml</code>，找到deploy项，修改为：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/YourgithubName/YourgithubName.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>然后使用npm安装deploy-git:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>最后：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
+
+<p>即可部署。</p>
+<h2 id="目前使用的站点配置文件与主题"><a href="#目前使用的站点配置文件与主题" class="headerlink" title="目前使用的站点配置文件与主题"></a><strong>目前使用的站点配置文件与主题</strong></h2><p>站点：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"># Hexo Configuration</span><br><span class="line">## Docs: https://hexo.io/docs/configuration.html</span><br><span class="line">## Source: https://github.com/hexojs/hexo/</span><br><span class="line"></span><br><span class="line"># Site</span><br><span class="line">title: My World</span><br><span class="line">subtitle: </span><br><span class="line">description:</span><br><span class="line">keywords:</span><br><span class="line">author: DwChy</span><br><span class="line">language: zh-CN</span><br><span class="line">timezone:</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: http://dwchy.github.io</span><br><span class="line">root: /</span><br><span class="line">permalink: :title/</span><br><span class="line">permalink_defaults:</span><br><span class="line"></span><br><span class="line"># Directory</span><br><span class="line">source_dir: source</span><br><span class="line">public_dir: public</span><br><span class="line">tag_dir: tags</span><br><span class="line">archive_dir: archives</span><br><span class="line">category_dir: categories</span><br><span class="line">code_dir: downloads/code</span><br><span class="line">i18n_dir: :lang</span><br><span class="line">skip_render:</span><br><span class="line"></span><br><span class="line"># Writing</span><br><span class="line">new_post_name: :title.md # File name of new posts</span><br><span class="line">default_layout: post</span><br><span class="line">titlecase: false # Transform title into titlecase</span><br><span class="line">external_link: true # Open external links in new tab</span><br><span class="line">filename_case: 0</span><br><span class="line">render_drafts: false</span><br><span class="line">post_asset_folder: false</span><br><span class="line">relative_link: false</span><br><span class="line">future: true</span><br><span class="line">highlight:</span><br><span class="line">  enable: true</span><br><span class="line">  line_number: true</span><br><span class="line">  auto_detect: false</span><br><span class="line">  tab_replace:</span><br><span class="line">  </span><br><span class="line"># Home page setting</span><br><span class="line"># path: Root path for your blogs index page. (default = &apos;&apos;)</span><br><span class="line"># per_page: Posts displayed per page. (0 = disable pagination)</span><br><span class="line"># order_by: Posts order. (Order by date descending by default)</span><br><span class="line">index_generator:</span><br><span class="line">  path: &apos;&apos;</span><br><span class="line">  per_page: 10</span><br><span class="line">  order_by: -date</span><br><span class="line">  </span><br><span class="line"># Category &amp; Tag</span><br><span class="line">default_category: uncategorized</span><br><span class="line">category_map:</span><br><span class="line">tag_map:</span><br><span class="line"></span><br><span class="line"># Date / Time format</span><br><span class="line">## Hexo uses Moment.js to parse and display date</span><br><span class="line">## You can customize the date format as defined in</span><br><span class="line">## http://momentjs.com/docs/#/displaying/format/</span><br><span class="line">date_format: YYYY-MM-DD</span><br><span class="line">time_format: HH:mm:ss</span><br><span class="line"></span><br><span class="line"># Pagination</span><br><span class="line">## Set per_page to 0 to disable pagination</span><br><span class="line">per_page: 10</span><br><span class="line">pagination_dir: page</span><br><span class="line"></span><br><span class="line"># Extensions</span><br><span class="line">## Plugins: https://hexo.io/plugins/</span><br><span class="line">## Themes: https://hexo.io/themes/</span><br><span class="line">theme: icarus</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/DwChy/dwchy.github.io</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>主题：<br>使用的是icarus主题，安装只需将主题下载至theme文件夹（其他主题亦同）:</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ppoffice/hexo-theme-icarus themes/icarus</span><br></pre></td></tr></table></figure>
+
+<p>主题配置文件：</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br></pre></td><td class="code"><pre><span class="line"># Version of the Icarus theme that is currently used</span><br><span class="line">version: 2.6.0</span><br><span class="line"># Path or URL to the website&apos;s icon</span><br><span class="line">favicon: https://s2.ax1x.com/2019/10/14/uzSPVU.png</span><br><span class="line"># Additional HTML meta tags in an array.</span><br><span class="line">meta: </span><br><span class="line"># Path or URL to RSS atom.xml</span><br><span class="line">rss: </span><br><span class="line"># Path or URL to the website&apos;s logo to be shown on the left of the navigation bar or footer</span><br><span class="line">logo: https://s2.ax1x.com/2019/10/14/uzS9bT.png</span><br><span class="line"># Open Graph metadata</span><br><span class="line"># https://hexo.io/docs/helpers.html#open-graph</span><br><span class="line">open_graph: </span><br><span class="line">    # Facebook App ID</span><br><span class="line">    fb_app_id: </span><br><span class="line">    # Facebook Admin ID</span><br><span class="line">    fb_admins: </span><br><span class="line">    # Twitter ID</span><br><span class="line">    twitter_id: </span><br><span class="line">    # Twitter site</span><br><span class="line">    twitter_site: </span><br><span class="line">    # Google+ profile link</span><br><span class="line">    google_plus: </span><br><span class="line"># Navigation bar link settings</span><br><span class="line">navbar:</span><br><span class="line">    # Navigation bar menu links</span><br><span class="line">    menu:</span><br><span class="line">        主页: /</span><br><span class="line">        归档: /archives</span><br><span class="line">        分类: /categories</span><br><span class="line">        标签: /tags</span><br><span class="line">        关于: /about</span><br><span class="line">    # Navigation bar links to be shown on the right</span><br><span class="line">    links:</span><br><span class="line">        My GitHub:</span><br><span class="line">            icon: fab fa-github</span><br><span class="line">            url: &apos;https://github.com/DwChy&apos;</span><br><span class="line"># Footer section link settings</span><br><span class="line">footer:</span><br><span class="line">    # Links to be shown on the right of the footer section</span><br><span class="line">    links:</span><br><span class="line">        Creative Commons:</span><br><span class="line">            icon: fab fa-creative-commons</span><br><span class="line">            url: &apos;https://creativecommons.org/&apos;</span><br><span class="line">        Attribution 4.0 International:</span><br><span class="line">            icon: fab fa-creative-commons-by</span><br><span class="line">            url: &apos;https://creativecommons.org/licenses/by/4.0/&apos;</span><br><span class="line">        Download on GitHub:</span><br><span class="line">            icon: fab fa-github</span><br><span class="line">            url: &apos;https://github.com/ppoffice/hexo-theme-icarus&apos;</span><br><span class="line"># Article display settings</span><br><span class="line">article:</span><br><span class="line">    # Code highlight settings</span><br><span class="line">    highlight:</span><br><span class="line">        # Code highlight themes</span><br><span class="line">        # https://github.com/highlightjs/highlight.js/tree/master/src/styles</span><br><span class="line">        theme: atom-one-light</span><br><span class="line">        # Show code copying button</span><br><span class="line">        clipboard: true</span><br><span class="line">        # Default folding status of the code blocks. Can be &quot;&quot;, &quot;folded&quot;, &quot;unfolded&quot;</span><br><span class="line">        fold: unfolded</span><br><span class="line">    # Whether to show article thumbnail images</span><br><span class="line">    thumbnail: true</span><br><span class="line">    # Whether to show estimate article reading time</span><br><span class="line">    readtime: true</span><br><span class="line"># Search plugin settings</span><br><span class="line"># https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Search</span><br><span class="line">search:</span><br><span class="line">    # Name of the search plugin</span><br><span class="line">    type: insight</span><br><span class="line"># Comment plugin settings</span><br><span class="line"># https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Comment</span><br><span class="line">comment:</span><br><span class="line">    # Name of the comment plugin</span><br><span class="line">    type: </span><br><span class="line"># Donation entries</span><br><span class="line"># https://ppoffice.github.io/hexo-theme-icarus/categories/Donation/</span><br><span class="line"># Share plugin settings</span><br><span class="line"># https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Share</span><br><span class="line">share:</span><br><span class="line">    # Share plugin name</span><br><span class="line">    type: </span><br><span class="line"># Sidebar settings.</span><br><span class="line"># Please be noted that a sidebar is only visible when it has at least one widget</span><br><span class="line">sidebar:</span><br><span class="line">    # left sidebar settings</span><br><span class="line">    left:</span><br><span class="line">        # Whether the left sidebar is sticky when page scrolls</span><br><span class="line">        # https://ppoffice.github.io/hexo-theme-icarus/Configuration/Theme/make-a-sidebar-sticky-when-page-scrolls/</span><br><span class="line">        sticky: false</span><br><span class="line">    # right sidebar settings</span><br><span class="line">    right:</span><br><span class="line">        # Whether the right sidebar is sticky when page scrolls</span><br><span class="line">        # https://ppoffice.github.io/hexo-theme-icarus/Configuration/Theme/make-a-sidebar-sticky-when-page-scrolls/</span><br><span class="line">        sticky: false</span><br><span class="line"># Sidebar widget settings</span><br><span class="line"># https://ppoffice.github.io/hexo-theme-icarus/categories/Widgets/</span><br><span class="line">widgets:</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: profile</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: left</span><br><span class="line">        # Author name to be shown in the profile widget</span><br><span class="line">        author: DwChy</span><br><span class="line">        # Title of the author to be shown in the profile widget</span><br><span class="line">        author_title: 想的太多，做的太少</span><br><span class="line">        # Author&apos;s current location to be shown in the profile widget</span><br><span class="line">        location: 中国 西安</span><br><span class="line">        # Path or URL to the avatar to be shown in the profile widget</span><br><span class="line">        avatar: https://s2.ax1x.com/2019/10/14/uxzqUg.jpg</span><br><span class="line">        # Email address for the Gravatar to be shown in the profile widget</span><br><span class="line">        gravatar: </span><br><span class="line">        # Whether to show avatar image rounded or square</span><br><span class="line">        avatar_rounded: false</span><br><span class="line">        # Path or URL for the follow button</span><br><span class="line">        follow_link: &apos;https://github.com/DwChy&apos;</span><br><span class="line">        # Links to be shown on the bottom of the profile widget</span><br><span class="line">        social_links:</span><br><span class="line">            Github:</span><br><span class="line">                icon: fab fa-github</span><br><span class="line">                url: &apos;https://github.com/DwChy&apos;</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: toc</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: left</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: links</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: left</span><br><span class="line">        # Links to be shown in the links widget</span><br><span class="line">        links:</span><br><span class="line">            阿里图标库: &apos;https://www.iconfont.cn/&apos;</span><br><span class="line">            免费图床: &apos;https://imgchr.com/&apos;</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: category</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: left</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: tagcloud</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: left</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: recent_posts</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: right</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: archive</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: right</span><br><span class="line">    -</span><br><span class="line">        # Widget name</span><br><span class="line">        type: tag</span><br><span class="line">        # Where should the widget be placed, left or right</span><br><span class="line">        position: right</span><br><span class="line"># Other plugin settings</span><br><span class="line">plugins:</span><br><span class="line">    # Enable page animations</span><br><span class="line">    animejs: true</span><br><span class="line">    # Enable the lightGallery and Justified Gallery plugins</span><br><span class="line">    # https://ppoffice.github.io/hexo-theme-icarus/Plugins/General/gallery-plugin/</span><br><span class="line">    gallery: true</span><br><span class="line">    # Enable the Outdated Browser plugin</span><br><span class="line">    # http://outdatedbrowser.com/</span><br><span class="line">    outdated-browser: true</span><br><span class="line">    # Enable the MathJax plugin</span><br><span class="line">    # https://ppoffice.github.io/hexo-theme-icarus/Plugins/General/mathjax-plugin/</span><br><span class="line">    mathjax: true</span><br><span class="line">    # Show the back to top button on mobile devices</span><br><span class="line">    back-to-top: true</span><br><span class="line">    # Google Analytics plugin settings</span><br><span class="line">    # https://ppoffice.github.io/hexo-theme-icarus/Plugins/General/site-analytics-plugin/#Google-Analytics</span><br><span class="line">    google-analytics:</span><br><span class="line">        # Google Analytics tracking id</span><br><span class="line">        tracking_id: </span><br><span class="line">    # Baidu Analytics plugin settings</span><br><span class="line">    # https://ppoffice.github.io/hexo-theme-icarus/Plugins/General/site-analytics-plugin/#Baidu-Analytics</span><br><span class="line">    baidu-analytics:</span><br><span class="line">        # Baidu Analytics tracking id</span><br><span class="line">        tracking_id: </span><br><span class="line">    # Hotjar user feedback plugin</span><br><span class="line">    # https://ppoffice.github.io/hexo-theme-icarus/Plugins/General/site-analytics-plugin/#Hotjar</span><br><span class="line">    hotjar:</span><br><span class="line">        # Hotjar site id</span><br><span class="line">        site_id: </span><br><span class="line">    # Show a loading progress bar at top of the page</span><br><span class="line">    progressbar: true</span><br><span class="line">    # BuSuanZi site/page view counter</span><br><span class="line">    # https://busuanzi.ibruce.info</span><br><span class="line">    busuanzi: false</span><br><span class="line"># CDN provider settings</span><br><span class="line"># https://ppoffice.github.io/hexo-theme-icarus/Configuration/Theme/speed-up-your-site-with-custom-cdn/</span><br><span class="line">providers:</span><br><span class="line">    # Name or URL of the JavaScript and/or stylesheet CDN provider</span><br><span class="line">    cdn: jsdelivr</span><br><span class="line">    # Name or URL of the webfont CDN provider</span><br><span class="line">    fontcdn: google</span><br><span class="line">    # Name or URL of the webfont Icon CDN provider</span><br><span class="line">    iconcdn: fontawesome</span><br></pre></td></tr></table></figure>
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/Blog/">Blog</a>, <a class="has-link-grey -link" href="/tags/Hexo/">Hexo</a>, <a class="has-link-grey -link" href="/tags/网站/">网站</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                    <figure class="image is-128x128 has-mb-6">
+                        <img class="" src="https://s2.ax1x.com/2019/10/14/uxzqUg.jpg" alt="DwChy">
+                    </figure>
+                    
+                    <p class="is-size-4 is-block">
+                        DwChy
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        想的太多，做的太少
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>中国 西安</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        1
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        1
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        3
+                    </p>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/DwChy" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/DwChy">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://www.iconfont.cn/" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">阿里图标库</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">www.iconfont.cn</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://imgchr.com/" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">免费图床</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">imgchr.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/前端/">
+            <span class="level-start">
+                <span class="level-item">前端</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/Blog/" style="font-size: 10px;">Blog</a> <a href="/tags/Hexo/" style="font-size: 10px;">Hexo</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a>
+    </div>
+</div>
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/aboutsite/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="建站的一些思路和Hexo的部分简单指令">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-19T08:53:03.226Z">2019-07-19</time></div>
+                    <a href="/aboutsite/" class="title has-link-black-ter is-size-6 has-text-weight-normal">建站的一些思路和Hexo的部分简单指令</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/前端/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Blog/">
+                        <span class="tag">Blog</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hexo/">
+                        <span class="tag">Hexo</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/网站/">
+                        <span class="tag">网站</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        <div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/aboutsite/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="建站的一些思路和Hexo的部分简单指令">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-19T08:53:03.226Z">2019-07-19</time></div>
+                    <a href="/aboutsite/" class="title has-link-black-ter is-size-6 has-text-weight-normal">建站的一些思路和Hexo的部分简单指令</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/前端/">前端</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Blog/">
+                        <span class="tag">Blog</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/Hexo/">
+                        <span class="tag">Hexo</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/网站/">
+                        <span class="tag">网站</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="https://s2.ax1x.com/2019/10/14/uzS9bT.png" alt="建站的一些思路和Hexo的部分简单指令" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2021 DwChy&nbsp;
+                Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+<script>
+var IcarusThemeSettings = {
+    article: {
+        highlight: {
+            clipboard: true,
+            fold: 'unfolded'
+        }
     }
 };
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+
+
+
+    
+    
+<script src="/js/animation.js"></script>
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+<script src="/js/gallery.js" defer></script>
+
+    
+    
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+    
+    
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
